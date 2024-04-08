@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O-ring Flattening Calculator</title>
+</head>
+<body>
+  <h1>O-ring Flattening Calculator</h1>
+  <form id="form-flattening">
+    <label for="groove-diam">Groove Diameter:</label>
+    <input type="number" id="groove-diam" name="groove-diam" step="0.01" required>
+    <br>
+    <label for="internal-diam">Internal Diameter:</label>
+    <input type="number" id="internal-diam" name="internal-diam" step="0.01" required>
+    <br>
+    <label for="cross-section">Cross-Section:</label>
+    <input type="number" id="cross-section" name="cross-section" step="0.01" required>
+    <br>
+    <button type="submit">Calculate</button>
+  </form>
+  <br>
+  <div id="result"></div>
+
+  <script>
+
+// Define Python-like functions in JavaScript
+function yFunc(x) {
+  if (0 < x && x < 3) {
+    return -0.005 + 1.19*x - 0.19*x**2 - 0.001*x**3 + 0.0057*x**4;
+  } else if (3 <= x && x < 25) {
+    return 0.56 + 0.59*x - 0.0046*x**2;
+  } else {
+    throw new Error("x must be between 0 and 25 (exclusive)");
+  }
+}
+
+function calculateFlattening(grooveDiam, internalDiam, crossSection) {
+  try {
+    const x = (grooveDiam - internalDiam) / grooveDiam;
+    const y = yFunc(x);
+    const flattenCs = (1 - y) * crossSection;
+    const externalDiam = 2 * flattenCs + grooveDiam;
+
+    return `For groove diameter = ${grooveDiam.toFixed(2)}, internal diameter = ${internalDiam.toFixed(2)}, and cross-section = ${crossSection.toFixed(2)}:
+      Flattening % = ${y.toFixed(4)}
+      Final Cross section = ${flattenCs.toFixed(2)}
+      External diameter = ${externalDiam.toFixed(2)}`;
+  } catch (error) {
+    return `Error: ${error.message}`;
+  }
+}
+
+// Event listener for form submission
+document.getElementById("form-flattening").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const grooveDiam = parseFloat(document.getElementById("groove-diam").value);
+  const internalDiam = parseFloat(document.getElementById("internal-diam").value);
+  const crossSection = parseFloat(document.getElementById("cross-section").value);
+
+  const resultDiv = document.getElementById("result");
+  const result = calculateFlattening(grooveDiam, internalDiam, crossSection);
+  resultDiv.textContent = result;
+});
+
+  </script>
+</body>
+</html>
