@@ -34,7 +34,7 @@ function yFunc(x) {
   } else if (3 <= x && x < 25) {
     return 0.56 + 0.59*x - 0.0046*x**2;
   } else {
-    throw new Error("x must be between 0 and 25 (exclusive)");
+    throw new Error("Diametral stretch should be between 0 and 25 (exclusive), but not more than 5 is advised");
   }
 }
 
