@@ -40,9 +40,9 @@ function yFunc(x) {
 
 function calculateFlattening(grooveDiam, internalDiam, crossSection) {
   try {
-    const x = (grooveDiam - internalDiam) / grooveDiam;
+    const x = ((grooveDiam - internalDiam)*100) / internalDiam;
     const y = yFunc(x);
-    const flattenCs = (1 - y) * crossSection;
+    const flattenCs = ((100 - y)/100) * crossSection;
     const externalDiam = 2 * flattenCs + grooveDiam;
 
     return `For groove diameter = ${grooveDiam.toFixed(2)}, internal diameter = ${internalDiam.toFixed(2)}, and cross-section = ${crossSection.toFixed(2)}:
